@@ -23,7 +23,7 @@ use ethcore::state_diff;
 use ethcore::account_diff;
 use ethcore::client::Executed;
 use vm;
-use v1::types::{Bytes, H160, H256, U256};
+use v1::types::{Bytes, H160, H256, U256, Log};
 
 #[derive(Debug, Serialize)]
 /// A diff of some chunk of memory.
@@ -606,6 +606,8 @@ pub struct TraceResults {
 	pub output: Bytes,
 	/// The transaction trace.
 	pub trace: Vec<Trace>,
+	/// The transaction logs
+	pub logs: Vec<Log>,
 	/// The transaction trace.
 	#[serde(rename="vmTrace")]
 	pub vm_trace: Option<VMTrace>,
@@ -622,6 +624,7 @@ impl From<Executed> for TraceResults {
 			trace: t.trace.into_iter().map(Into::into).collect(),
 			vm_trace: t.vm_trace.map(Into::into),
 			state_diff: t.state_diff.map(Into::into),
+			logs: t.logs.into_iter().map(Into::into).collect()
 		}
 	}
 }
